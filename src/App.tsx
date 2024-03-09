@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import { Header } from './components/Header';
+import { Home } from './pages/Home';
+import { ModalAddHoliday } from './components/ModalAddHoliday';
+import { Holiday } from './models/holiday.model';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [openModalAdd, setOpenModalAdd] = useState(false);
+	const [holidayInfo, setHolidayInfo] = useState<Holiday>({
+		description: '',
+		locations: [],
+		participants: [],
+		title: '',
+	});
+
+	return (
+		<div className='h-screen flex flex-col items-center overflow-hidden w-full'>
+			<ModalAddHoliday
+				holidayInfo={holidayInfo}
+				setHolidayInfo={setHolidayInfo}
+				openModalAdd={openModalAdd}
+				setOpenModalAdd={setOpenModalAdd}
+			/>
+			<Header setOpenModalAdd={setOpenModalAdd} />
+			<Home />
+		</div>
+	);
 }
 
 export default App;
