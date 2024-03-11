@@ -6,7 +6,7 @@ import { api } from './api';
  * */
 const getHolidays = async () => {
 	try {
-		const { data } = await api.get(`/`);
+		const { data } = await api.get('/holidays');
 		return data;
 	} catch (error: any) {
 		return error.response.data;
