@@ -58,6 +58,13 @@ export const ModalAddHoliday = ({
 					getHolidays();
 					setSuccess({ msg: 'Holiday created successfully!' });
 					setOpenAlert(true);
+					setHolidayInfo({
+						title: '',
+						description: '',
+						date: undefined,
+						locations: [],
+						participants: [],
+					});
 					setOpenModalAdd(false);
 				} else if (res.status === 400) {
 					setSuccess({ msg: '' });
