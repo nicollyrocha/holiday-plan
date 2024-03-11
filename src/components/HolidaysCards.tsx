@@ -1,16 +1,14 @@
 import * as React from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Holiday } from '../models/holiday.model';
-import { CardHeader, Divider, IconButton, Menu, MenuItem } from '@mui/material';
+import { CardHeader, IconButton, Menu, MenuItem } from '@mui/material';
 import { fromDateToString } from '../functions/fromDateToString';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 /**
- * Cards to show holidays informations. If it is a mobile device, it will be shown
+ * Cards to show holidays informations. If it is a mobile device, it will be shown. The component uses the values passed by parameters.
  * */
 export const HolidaysCards = ({
 	holidays,

@@ -17,6 +17,9 @@ import { HolidaysService } from '../services/holidaysService';
 import { useContextProject } from '../controller/index';
 import CircularProgress from '@mui/material/CircularProgress';
 
+/**
+ * Modal with the form to create a new holiday. The component uses the values passed by parameters
+ * */
 export const ModalAddHoliday = ({
 	openModalAdd,
 	setOpenModalAdd,
@@ -221,7 +224,13 @@ export const ModalAddHoliday = ({
 						onChange={(value) =>
 							setHolidayInfo({
 								...holidayInfo,
-								date: new Date(dayjs(value as Date).toString()),
+								date: new Date(
+									dayjs(value as Date)
+										.hour(0)
+										.minute(0)
+										.second(0)
+										.toString()
+								),
 							})
 						}
 					/>

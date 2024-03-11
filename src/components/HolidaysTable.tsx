@@ -17,7 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { PdfHoliday } from './PdfHoliday';
 
 /**
- * Table to show holidays informations. If it is a desktop device, it will be shown
+ * Table to show holidays informations. If it is a desktop device, it will be shown. The component uses the values passed by parameters.
  * */
 export default function HolidaysTable({
 	holidays,

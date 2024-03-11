@@ -1,6 +1,9 @@
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
+/**
+ * Header with title and button to add new holiday. The button opens the ModalAddHoliday component.
+ * */
 export const Header = ({
 	setOpenModalAdd,
 }: {

@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
 	},
 });
 
+/**
+ * Pdf gerenated from a holiday. The component uses the values passed by parameters
+ * */
 export const PdfHoliday = ({ row }: { row: Holiday }) => {
 	return (
 		<>

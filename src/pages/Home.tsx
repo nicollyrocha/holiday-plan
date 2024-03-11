@@ -35,6 +35,14 @@ export const Home = () => {
 			</div>
 		);
 
+	/**
+	 * Sorting holidays by date from latest to oldest
+	 * */
+	const holidaysSorted = holidays.sort((a, b) => {
+		if (b.date && a.date && b.date > a.date) return -1;
+		return 1;
+	});
+
 	return (
 		<div
 			className={`flex flex-col items-center w-full my-24 pb-10 h-full px-5 md:px-0 ${
@@ -59,16 +67,16 @@ export const Home = () => {
 				setOpenModal={setOpenModal}
 				holidaySeleted={holidaySeleted}
 			/>
-			{holidays && holidays.length > 0 ? (
+			{holidaysSorted && holidaysSorted.length > 0 ? (
 				<>
 					<HolidaysTable
-						holidays={holidays}
+						holidays={holidaysSorted}
 						setHolidaySelected={setHolidaySelected}
 						openModal={openModal}
 						setOpenModal={setOpenModal}
 					/>
 					<HolidaysCards
-						holidays={holidays}
+						holidays={holidaysSorted}
 						setHolidaySelected={setHolidaySelected}
 						openModal={openModal}
 						setOpenModal={setOpenModal}

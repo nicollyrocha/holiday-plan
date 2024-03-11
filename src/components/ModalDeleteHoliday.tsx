@@ -10,6 +10,9 @@ import { Holiday } from '../models/holiday.model';
 import { useContextProject } from '../controller/index';
 import { HolidaysService } from '../services/holidaysService';
 
+/**
+ * Modal asking if the user is sure he wants to delete the holiday. The component uses the values passed by parameters.
+ * */
 export const ModalDeleteHoliday = ({
 	openModal,
 	setOpenModal,

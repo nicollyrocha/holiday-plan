@@ -17,6 +17,9 @@ import { HolidaysService } from '../services/holidaysService';
 import { useContextProject } from '../controller/index';
 import CircularProgress from '@mui/material/CircularProgress';
 
+/**
+ * Modal with the form to edit a holiday. The component uses the values passed by parameters.
+ * */
 export const ModalEditHoliday = ({
 	openModal,
 	setOpenModal,
@@ -68,8 +71,8 @@ export const ModalEditHoliday = ({
 					setIsLoading({ ...isLoading, modal: false });
 					setErrorMsg('');
 					getHolidays();
-					setOpenAlert(true);
 					setSuccess({ msg: 'Holiday updated successfully!' });
+					setOpenAlert(true);
 					setOpenModal({ ...openModal, edit: false });
 				} else if (res.status === 400) {
 					setOpenAlert(true);
@@ -136,7 +139,10 @@ export const ModalEditHoliday = ({
 							onClick={() => (
 								setHolidayInfo({
 									...holidayInfo,
-									locations: holidayInfo.locations.concat(location),
+									locations:
+										holidayInfo.locations.length > 0
+											? holidayInfo.locations.concat(location)
+											: [location],
 								}),
 								setLocation('')
 							)}
@@ -184,7 +190,10 @@ export const ModalEditHoliday = ({
 							onClick={() => (
 								setHolidayInfo({
 									...holidayInfo,
-									participants: holidayInfo.participants.concat(participant),
+									participants:
+										holidayInfo.participants && holidayInfo.participants.length > 0
+											? holidayInfo.participants.concat(participant)
+											: [participant],
 								}),
 								setParticipant('')
 							)}
@@ -227,7 +236,7 @@ export const ModalEditHoliday = ({
 						onChange={(value) =>
 							setHolidayInfo({
 								...holidayInfo,
-								date: new Date(dayjs(value).toString()),
+								date: new Date(dayjs(value).hour(0).minute(0).second(0).toString()),
 							})
 						}
 					/>
