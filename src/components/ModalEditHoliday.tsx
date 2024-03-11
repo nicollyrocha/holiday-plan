@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Holiday } from '../models/holiday.model';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -17,20 +17,27 @@ import { HolidaysService } from '../services/holidaysService';
 import { useContextProject } from '../controller/index';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export const ModalAddHoliday = ({
-	openModalAdd,
-	setOpenModalAdd,
-	holidayInfo,
-	setHolidayInfo,
+export const ModalEditHoliday = ({
+	openModal,
+	setOpenModal,
+	holidaySeleted,
 }: {
-	openModalAdd: boolean;
-	setOpenModalAdd: React.Dispatch<React.SetStateAction<boolean>>;
-	holidayInfo: Holiday;
-	setHolidayInfo: React.Dispatch<React.SetStateAction<Holiday>>;
+	openModal: {
+		edit: boolean;
+		delete: boolean;
+	};
+	setOpenModal: React.Dispatch<
+		React.SetStateAction<{
+			edit: boolean;
+			delete: boolean;
+		}>
+	>;
+	holidaySeleted: Holiday;
 }) => {
 	const handleClose = () => {
-		setOpenModalAdd(false);
+		setOpenModal({ ...openModal, edit: false });
 	};
+	const [holidayInfo, setHolidayInfo] = useState<Holiday>(holidaySeleted);
 	const [location, setLocation] = useState('');
 	const [participant, setParticipant] = useState('');
 	const {
@@ -42,27 +49,32 @@ export const ModalAddHoliday = ({
 		getHolidays,
 	} = useContextProject();
 
+	useEffect(() => {
+		setHolidayInfo(holidaySeleted);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [openModal.edit]);
+
 	/**
 	 * Here the loading is setted as true, the holiday informations that are missing are defined, if the post returns status 201
-	 * the getHolidays function is called, the const holidays is reset and the loading is setted as false and the modal is closed.
+	 * the getHolidays function is called, the loading is setted as false and the modal is closed.
 	 * If status = 400, it means that another holiday was created on this date and the error message is shown
 	 * */
-	const createHoliday = () => {
+	const editHoliday = () => {
 		setIsLoading({ ...isLoading, modal: true });
 
-		HolidaysService.createHoliday(holidayInfo)
+		HolidaysService.updateHoliday(holidayInfo)
 			.then((res: any) => {
 				if (res.status === 201) {
 					setIsLoading({ ...isLoading, modal: false });
 					setErrorMsg('');
 					getHolidays();
-					setSuccess({ msg: 'Holiday created successfully!' });
 					setOpenAlert(true);
-					setOpenModalAdd(false);
+					setSuccess({ msg: 'Holiday updated successfully!' });
+					setOpenModal({ ...openModal, edit: false });
 				} else if (res.status === 400) {
+					setOpenAlert(true);
 					setSuccess({ msg: '' });
 					setIsLoading({ ...isLoading, modal: false });
-					setOpenAlert(true);
 					setErrorMsg('Another holiday was created on this date!');
 				}
 			})
@@ -70,13 +82,13 @@ export const ModalAddHoliday = ({
 				setSuccess({ msg: '' });
 				setIsLoading({ ...isLoading, modal: false });
 				setOpenAlert(true);
-				setErrorMsg('There was an error creating the holiday');
+				setErrorMsg('There was an error updating the holiday');
 			});
 	};
 
 	return (
-		<Dialog open={openModalAdd} onClose={handleClose}>
-			<DialogTitle>Add Holiday</DialogTitle>
+		<Dialog open={openModal.edit} onClose={handleClose}>
+			<DialogTitle>Edit Holiday</DialogTitle>
 			<DialogContent>
 				<TextField
 					autoFocus
@@ -208,13 +220,14 @@ export const ModalAddHoliday = ({
 				</div>
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
 					<DatePicker
+						value={dayjs(holidayInfo.date)}
 						format='MM/DD/YYYY'
 						sx={{ marginTop: '10px', width: '100%' }}
 						label='Date'
 						onChange={(value) =>
 							setHolidayInfo({
 								...holidayInfo,
-								date: new Date(dayjs(value as Date).toString()),
+								date: new Date(dayjs(value).toString()),
 							})
 						}
 					/>
@@ -229,7 +242,7 @@ export const ModalAddHoliday = ({
 						!holidayInfo.description ||
 						holidayInfo.locations.length === 0
 					}
-					onClick={() => createHoliday()}
+					onClick={() => editHoliday()}
 				>
 					{isLoading.modal ? <CircularProgress size={'1rem'} /> : 'Confirm'}
 				</Button>

@@ -17,10 +17,29 @@ const getHolidays = async () => {
  * Function to create a holiday
  * */
 const createHoliday = async (holidayInfo: Holiday) => {
-	console.log('a', holidayInfo);
 	try {
 		const { data } = await api.post('/holiday', holidayInfo);
-		console.log(data);
+		return data;
+	} catch (error: any) {
+		return error.response.data;
+	}
+};
+
+/**
+ * Function to update a holiday
+ * */
+const updateHoliday = async (holidayInfo: Holiday) => {
+	try {
+		const { data } = await api.put('/holiday', holidayInfo);
+		return data;
+	} catch (error: any) {
+		return error.response.data;
+	}
+};
+
+const deleteHoliday = async (id: number) => {
+	try {
+		const { data } = await api.delete(`/holiday/${id}`);
 		return data;
 	} catch (error: any) {
 		return error.response.data;
@@ -30,4 +49,6 @@ const createHoliday = async (holidayInfo: Holiday) => {
 export const HolidaysService = {
 	getHolidays,
 	createHoliday,
+	updateHoliday,
+	deleteHoliday,
 };

@@ -1,10 +1,32 @@
 import HolidaysTable from '../components/HolidaysTable';
 import { NoItemsCard } from '../components/NoItemsCard';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Context } from '../controller';
+import { useContextProject } from '../controller/index';
+import { ModalEditHoliday } from '../components/ModalEditHoliday';
+import { useState } from 'react';
+import { Holiday } from '../models/holiday.model';
+import { HolidaysCards } from '../components/HolidaysCards';
+import { ModalDeleteHoliday } from '../components/ModalDeleteHoliday';
+import { AlertSnackbar } from '../components/AlertSnackbar';
 
 export const Home = () => {
-	const { holidays, isLoading } = Context();
+	const {
+		holidays,
+		isLoading,
+		openAlert,
+		setOpenAlert,
+		success,
+		setSuccess,
+		errorMsg,
+		setErrorMsg,
+	} = useContextProject();
+	const [openModal, setOpenModal] = useState({ edit: false, delete: false });
+	const [holidaySeleted, setHolidaySelected] = useState<Holiday>({
+		title: '',
+		description: '',
+		locations: [],
+		participants: [],
+	});
 
 	if (isLoading.getHolidays)
 		return (
@@ -12,11 +34,46 @@ export const Home = () => {
 				<CircularProgress />
 			</div>
 		);
-	console.log(holidays);
+
 	return (
-		<div className='flex flex-col items-center justify-center w-full h-full'>
+		<div
+			className={`flex flex-col items-center w-full my-24 pb-10 h-full px-5 md:px-0 ${
+				holidays && holidays.length > 0 ? '' : 'justify-center'
+			}`}
+		>
+			<AlertSnackbar
+				errorMsg={errorMsg}
+				setSuccess={setSuccess}
+				setOpenAlert={setOpenAlert}
+				success={success}
+				openAlert={openAlert}
+				setErrorMsg={setErrorMsg}
+			/>
+			<ModalEditHoliday
+				openModal={openModal}
+				setOpenModal={setOpenModal}
+				holidaySeleted={holidaySeleted}
+			/>
+			<ModalDeleteHoliday
+				openModal={openModal}
+				setOpenModal={setOpenModal}
+				holidaySeleted={holidaySeleted}
+			/>
 			{holidays && holidays.length > 0 ? (
-				<HolidaysTable holidays={holidays} />
+				<>
+					<HolidaysTable
+						holidays={holidays}
+						setHolidaySelected={setHolidaySelected}
+						openModal={openModal}
+						setOpenModal={setOpenModal}
+					/>
+					<HolidaysCards
+						holidays={holidays}
+						setHolidaySelected={setHolidaySelected}
+						openModal={openModal}
+						setOpenModal={setOpenModal}
+					/>
+				</>
 			) : (
 				<NoItemsCard />
 			)}

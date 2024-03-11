@@ -7,11 +7,11 @@ export const Header = ({
 	setOpenModalAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	return (
-		<div className='flex w-full justify-between items-center p-4 bg-neutral-300'>
+		<div className='flex w-full justify-between items-center p-4 bg-[#44749d] fixed z-50'>
 			<div></div>
-			<div className='font-bold text-2xl'>Holiday Planner</div>
+			<div className='font-bold text-2xl text-white'>Holiday Planner</div>
 			<IconButton onClick={() => setOpenModalAdd(true)}>
-				<AddIcon />
+				<AddIcon sx={{ color: 'white' }} />
 			</IconButton>
 		</div>
 	);
